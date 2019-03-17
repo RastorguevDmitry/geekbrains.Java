@@ -3,11 +3,9 @@ package lesson2;
 class MassivaStringVInt {
     String[][] massiv;
 
-
     public MassivaStringVInt(String[][] massiv) {
         this.massiv = massiv;
     }
-
 
     public void masStringVInt() throws MyArraySizeException, MyArrayDataException {
         String[][] newMassivInt = new String[Main.RAZMERNOST][Main.RAZMERNOST];
