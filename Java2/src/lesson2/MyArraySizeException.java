@@ -1,6 +1,8 @@
+package lesson2;
+
 public class MyArraySizeException extends Exception {
 
-
+    String message;
     private int number;
 
     public int getNumber() {
@@ -8,8 +10,7 @@ public class MyArraySizeException extends Exception {
     }
 
     public MyArraySizeException(String message) {
-
-        super(message);
+        this.message = message;
     }
 
 

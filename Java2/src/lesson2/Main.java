@@ -1,3 +1,5 @@
+package lesson2;
+
 public class Main {
 //    1. Напишите метод, на вход которого подаётся двумерный строковый массив размером 4х4,
 //    при подаче массива другого размера необходимо бросить исключение MyArraySizeException.
@@ -10,29 +12,35 @@ public class Main {
 // 3. В методе main() вызвать полученный метод, обработать возможные исключения MySizeArrayException
 // и MyArrayDataException, и вывести результат расчета.
 
+    public final static int RAZMERNOST = 4; //текущая размерность массива
+    public final static int RAZMERNOST_FOR_CHEK = 4; //проверяемая размерность
 
-   public   final static int RAZMERNOST = 4; //текущая размерность массива
-   public   final static int RAZMERNOST_FOR_CHEK = 4; //проверяемая размерность
+    public static void main(String[] args) {
+        String[][] massiv = new String[RAZMERNOST][5];
 
-    public static void main(String[] args) throws MyArraySizeException {
-        String[][] massiv = new String[RAZMERNOST][RAZMERNOST];
-        String[][] massivNew = new String[5][5];
-
-        //создание массива
+        //заполнение строкового массива 4*4
         for (int i = 0; i < RAZMERNOST; i++) {
             for (int j = 0; j < RAZMERNOST; j++) {
-                massiv[i][j] = " " + i + j;
+                massiv[i][j] = "" + i + j;
             }
+            // тест - ввести строку в яцейку
+            massiv[2][3] = "d";
         }
 
+        MassivaStringVInt newMassiv = new MassivaStringVInt(massiv);
 
-        MassivaStringVInt newMassiv= new MassivaStringVInt(massiv);
-        newMassiv.massivaStringVInt();
-
+        try {
+            newMassiv.masStringVInt();
+        }
+        //ошибки при невозможности преобразования в число введенного массива
+        catch (MyArrayDataException myArrayDataException) {
+            System.out.println(myArrayDataException.message + "Ошибка в ячейке [" +
+                    myArrayDataException.i + "], [" + myArrayDataException.j + "]");
+        }
+        //ошибки при введении массива, размерностью отличной от 4*4
+        catch (MyArraySizeException myArraySizeException) {
+            System.out.println(myArraySizeException.message);
+        }
     }
-
-
-
-
 
 }
