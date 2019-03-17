@@ -32,7 +32,6 @@ class MassivaStringVInt {
                 summa += elMassivaToInt;
                 //  System.out.print(massiv[i][j] + " ");
             }
-
         }
         System.out.println("Сумма элементов массива = " + summa);
     }
