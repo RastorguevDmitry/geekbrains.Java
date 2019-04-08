@@ -5,62 +5,74 @@ import java.net.InetAddress;
 import java.net.Socket;
 
 
-public class Client
-{
+public class Client {
 
-  public static void main(String[] args)
-  {
+    Socket socket;
+    DataInputStream in;
+    DataOutputStream out;
+    boolean authorized;
+    String myNick;
 
-    try {
-      Socket socket = new Socket("localhost", 8189);
-      DataInputStream in = new DataInputStream(socket.getInputStream());
-      DataOutputStream out = new DataOutputStream(socket.getOutputStream());
+    public  void main(String[] args) {
+        start();
 
-    //  setAuthorized(false);
-      Thread t = new Thread(new Runnable() {
-        @Override
-        public void run() {
-          try {
-            while (true) {
-              String strFromServer = in.readUTF();
-              if(strFromServer.startsWith("/authok")) {
-    //            setAuthorized(true);
-                break;
-              }
-              chatArea.appendText(strFromServer + "\n");
-            }
-            while (true) {
-              String strFromServer = in.readUTF();
-              if (strFromServer.equalsIgnoreCase("/end")) {
-                break;
-              }
-              chatArea.append(strFromServer);
-              chatArea.append("\n");
-            }
-          } catch (Exception e) {
+    }
+
+
+    public  void start() {
+        try {
+            setAuthorized(false);
+            socket = new Socket("localhost", 8189);
+            in = new DataInputStream(socket.getInputStream());
+            out = new DataOutputStream(socket.getOutputStream());
+            Thread t = new Thread(() -> {
+
+                try {
+                    while (true) {
+                        String str = in.readUTF();
+                        if (str.startsWith("/authok ")) {
+                            setAuthorized(true);
+                            myNick = str.split("\\s")[1];
+                            break;
+                        }
+//                        textArea.appendText(str + "\n");
+                    }
+                    // ...
+                } catch (IOException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        setAuthorized(false);
+                        socket.close();
+                        myNick = "";
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+            t.start();
+        } catch (IOException e) {
+//            showAlert("Не удалось подключиться к серверу");
             e.printStackTrace();
-          }
         }
-      });
-      t.setDaemon(true);
-      t.start();
-    } catch (IOException e) {
-      e.printStackTrace();
     }
 
-
-  }
-
-
-  public void onAuthClick() {
-    try {
-      out.writeUTF("/auth " + loginField.getText() + " " + passField.getText());
-      loginField.clear();
-      passField.clear();
-    } catch (Exception e) {
-      e.printStackTrace();
+    private void setAuthorized(boolean authorized) {
+        this.authorized = authorized;
     }
-  }
+
+    public void onAuthClick() {
+        if (socket == null || socket.isClosed()) {
+            start();
+        }
+        try {
+//            out.writeUTF("/auth " + loginField.getText() + " " + passField.getText());
+//            loginField.setText("");
+//            passField.setText("");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 
 }
