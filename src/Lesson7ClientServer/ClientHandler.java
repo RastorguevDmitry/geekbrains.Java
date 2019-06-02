@@ -5,7 +5,9 @@ import Lesson7ClientServer.Server.MyServer;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.Socket;
+import java.util.Scanner;
 
 public class ClientHandler {
 
@@ -13,6 +15,9 @@ public class ClientHandler {
     private Socket socket;
     private DataInputStream in;
     private DataOutputStream out;
+    private PrintWriter outMessage;
+    private Scanner inMessage;
+    private static int clientsCount = 0;
 
     private String name;
 
@@ -22,6 +27,13 @@ public class ClientHandler {
 
     public ClientHandler(MyServer myServer, Socket socket) {
         try {
+            clientsCount++;
+            System.out.println(clientsCount);
+//            this.myServer = myServer;
+//            this.socket = socket;
+//            this.outMessage = new PrintWriter(socket.getOutputStream());
+//            this.inMessage = new Scanner(socket.getInputStream());
+
             this.myServer = myServer;
             this.socket = socket;
             this.in = new DataInputStream(socket.getInputStream());
@@ -71,6 +83,7 @@ public class ClientHandler {
     public void readMessages() throws IOException {
         while (true) {
             String str = in.readUTF();
+            System.out.println(str);
             if (str.startsWith("/")) {
                 if (str.equals("/end")) {
                     break;
